@@ -1,4 +1,4 @@
-# stateful_app
+# galleria
 
 A new Flutter project.
 

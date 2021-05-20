@@ -1,58 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import './question.dart';
+import './screens/cart_screen.dart';
+import './screens/products_overview_screen.dart';
+import './screens/product_detail_screen.dart';
+import './providers/products.dart';
+import './providers/cart.dart';
+import './providers/orders.dart';
+import './screens/orders_screen.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() {
-    return MyAppState();
-  }
-}
-
-class MyAppState extends State<MyApp> {
-  void answerButton() {
-    setState(() {
-      questionIndex = questionIndex + 1;
-    });
-    print(questionIndex);
-  }
-
-  var questionIndex = 0;
   Widget build(BuildContext context) {
-    var questions = [
-      'What is Your favorite colour',
-      'What is your favorite animal'
-    ];
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('My First App'),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => Products(),
         ),
-        body: Column(
-          //vertical layout
-          children: [
-            Text('This is My default text'),
-            Question(questions[questionIndex]),
-            RaisedButton(
-              child: Text('Answer 1'),
-              onPressed: answerButton, //pointer
-            ),
-            RaisedButton(
-              child: Text('Answer 2'),
-              onPressed:
-                  answerButton, //pointer and  also do () =>print('Answer2 Chosen')
-            ),
-            RaisedButton(
-              child: Text('Answer 3'),
-              onPressed: answerButton, //pointer
-            ),
-          ],
+        ChangeNotifierProvider(
+          create: (_) => Cart(),
         ),
-      ),
+        ChangeNotifierProvider(
+          create: (_) => Orders(),
+        ),
+      ],
+      child: MaterialApp(
+          title: 'MyShop',
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.deepOrange,
+            fontFamily: 'Lato',
+          ),
+          home: ProductsOverviewScreen(),
+          routes: {
+            ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+            CartScreen.routeName: (ctx) => CartScreen(),
+            OrdersScreen.routeName: (ctx) => OrdersScreen(),
+          }),
     );
   }
 }
